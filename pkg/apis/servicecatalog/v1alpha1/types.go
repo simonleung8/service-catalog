@@ -166,8 +166,11 @@ type Instance struct {
 	metav1.TypeMeta `json:",inline"`
 	v1.ObjectMeta   `json:"metadata,omitempty"`
 
-	Spec   InstanceSpec   `json:"spec"`
-	Status InstanceStatus `json:"status"`
+	Spec              InstanceSpec   `json:"spec"`
+	Status            InstanceStatus `json:"status"`
+	NewField1         string         `json:"newfield1"`
+	NewField2         string         `json:"newfield2"`
+	KubectlGetColumns string         `json:"x-kubernetes-kubectl-get-columns"`
 }
 
 // InstanceSpec represents a description of an Instance.

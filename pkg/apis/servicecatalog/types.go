@@ -168,8 +168,11 @@ type Instance struct {
 	metav1.TypeMeta
 	kapi.ObjectMeta
 
-	Spec   InstanceSpec `json:"spec"`
-	Status InstanceStatus
+	Spec              InstanceSpec `json:"spec"`
+	Status            InstanceStatus
+	NewField1         string `json:"newfield1"`
+	NewField2         string `json:"newfield2"`
+	KubectlGetColumns string `json:"x-kubernetes-kubectl-get-columns"`
 }
 
 // InstanceSpec represents a description of an Instance.

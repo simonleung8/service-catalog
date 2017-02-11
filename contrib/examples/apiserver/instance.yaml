@@ -4,3 +4,6 @@ metadata:
   name: test-instance
 spec:
   serviceClassName: dugs awesome service instance
+newfield1: Foo
+newfield2: Bar
+x-kubernetes-kubectl-get-columns: "NewField1:.newfield1,NewField2:.newfield2,Null_Col:.blah"

@@ -385,6 +385,9 @@ func autoConvert_v1alpha1_Instance_To_servicecatalog_Instance(in *Instance, out 
 	if err := Convert_v1alpha1_InstanceStatus_To_servicecatalog_InstanceStatus(&in.Status, &out.Status, s); err != nil {
 		return err
 	}
+	out.NewField1 = in.NewField1
+	out.NewField2 = in.NewField2
+	out.KubectlGetColumns = in.KubectlGetColumns
 	return nil
 }
 
@@ -403,6 +406,9 @@ func autoConvert_servicecatalog_Instance_To_v1alpha1_Instance(in *servicecatalog
 	if err := Convert_servicecatalog_InstanceStatus_To_v1alpha1_InstanceStatus(&in.Status, &out.Status, s); err != nil {
 		return err
 	}
+	out.NewField1 = in.NewField1
+	out.NewField2 = in.NewField2
+	out.KubectlGetColumns = in.KubectlGetColumns
 	return nil
 }
 
