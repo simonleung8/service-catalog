@@ -11,8 +11,8 @@ import:
 - package: k8s.io/gengo/args
 - package: github.com/kubernetes/repo-infra
   version: 4c4ae2e2e6994e887da16f3c31f495e10062b810
-- package: k8s.io/kubernetes
-  version: 6b9a9442855d16e0ff0c02ab0c82b1c1665cccaf
+- package: github.com/simonleung8/kubernetes
+  version: service-catalog-dep
   subpackages:
   - pkg/genericapiserver
 - package: k8s.io/client-go
