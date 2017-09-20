@@ -110,7 +110,7 @@ NON_VENDOR_DIRS = $(shell $(DOCKER_CMD) glide nv)
 build: .init .generate_files \
 	$(BINDIR)/apiserver \
 	$(BINDIR)/controller-manager \
-	$(BINDIR)/user-broker
+	$(BINDIR)/user-broker \
 	plugins
 
 user-broker: $(BINDIR)/user-broker

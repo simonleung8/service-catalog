@@ -40,6 +40,10 @@ func CheckNamespaceExists(name string) error {
 	proxyURL := "http://127.0.0.1"
 	proxyPort := "8881"
 
+	// TODO: use the KUBECTL_PLUGINS_CALLER env var, which will
+	// give you the full path to the kubectl binary.
+	//
+	// https://github.com/kubernetes-incubator/service-catalog/pull/840/files#r120732815
 	kubeProxy := exec.Command("kubectl", "proxy", "-p", proxyPort)
 	defer func() {
 		if err := kubeProxy.Process.Kill(); err != nil {
