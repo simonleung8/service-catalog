@@ -20,50 +20,34 @@ import (
 	"fmt"
 	"os"
 
-	v1alpha1 "github.com/kubernetes-incubator/service-catalog/pkg/apis/servicecatalog/v1alpha1"
-	clientset "github.com/kubernetes-incubator/service-catalog/pkg/client/clientset_generated/clientset"
+	"github.com/kubernetes-incubator/service-catalog/pkg/apis/servicecatalog/v1alpha1"
 	"github.com/kubernetes-incubator/service-catalog/plugin/cmd/kubectl/utils"
-
-	"k8s.io/client-go/rest"
 )
 
 const usage = `Usage:
-  kubectl plugin create-service-instance SERVICE_CLASS_NAME PLAN_NAME INSTANCE_NAME NAMESPACE`
+  kubectl plugin create-service-instance SERVICE_CLASS_NAME PLAN_NAME INSTANCE_NAME`
 
 func main() {
-	svcURL := utils.SCUrlEnv()
-
-	if len(os.Args) != 5 {
+	if len(os.Args) != 4 {
 		utils.Exit1(usage)
 	}
+
+	scClient, config := utils.NewClient()
 
 	instance := v1alpha1.ServiceInstance{}
 	instance.Kind = "Instance"
 	instance.Name = os.Args[3]
-	instance.Namespace = os.Args[4]
+	instance.Namespace = utils.Namespace()
 	instance.Spec.PlanName = os.Args[2]
 	instance.Spec.ServiceClassName = os.Args[1]
 
-	fmt.Printf("Looking up Namespace %s...\n", utils.Entity(instance.Namespace))
-	if err := utils.CheckNamespaceExists(instance.Namespace); err != nil {
-		utils.Exit1(err.Error())
-	}
+	utils.CheckNamespaceExists(instance.Namespace, config)
 	utils.Ok()
 
-	restConfig := rest.Config{
-		Host:    svcURL,
-		APIPath: "/apis/servicecatalog.k8s.io/v1alpha1",
-	}
-
-	svcClient, err := clientset.NewForConfig(&restConfig)
-	if err != nil {
-		utils.Exit1(fmt.Sprintf("Failed to initializing client for service catalog (%s)", err))
-	}
-
 	fmt.Printf("Creating service instance %s in Namespace %s...\n", utils.Entity(instance.Name), utils.Entity(instance.Namespace))
-	resp, err := svcClient.ServiceInstances(instance.Namespace).Create(&instance)
+	resp, err := scClient.ServiceInstances(instance.Namespace).Create(&instance)
 	if err != nil {
-		utils.Exit1(fmt.Sprintf("Failed to creating service instance (%s)", err))
+		utils.Exit1(fmt.Sprintf("Failed to create service instance (%s)", err))
 	}
 	utils.Ok()
 
