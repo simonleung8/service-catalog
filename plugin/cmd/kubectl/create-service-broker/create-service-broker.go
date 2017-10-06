@@ -21,39 +21,26 @@ import (
 	"os"
 
 	"github.com/kubernetes-incubator/service-catalog/pkg/apis/servicecatalog/v1alpha1"
-	"github.com/kubernetes-incubator/service-catalog/pkg/client/clientset_generated/clientset"
 	"github.com/kubernetes-incubator/service-catalog/plugin/cmd/kubectl/utils"
-
-	"k8s.io/client-go/rest"
 )
 
 const usage = `Usage:
   kubectl plugin create-service-broker BROKER_NAME BROKER_URL`
 
 func main() {
-	svcURL := utils.SCUrlEnv()
-
 	if len(os.Args) != 3 {
 		utils.Exit1(usage)
 	}
+
+	scClient, _ := utils.NewClient()
 
 	broker := v1alpha1.ServiceBroker{}
 	broker.Kind = "Broker"
 	broker.Name = os.Args[1]
 	broker.Spec.URL = os.Args[2]
 
-	restConfig := rest.Config{
-		Host:    svcURL,
-		APIPath: "/apis/servicecatalog.k8s.io/v1alpha1",
-	}
-
-	svcClient, err := clientset.NewForConfig(&restConfig)
-	if err != nil {
-		utils.Exit1(fmt.Sprintf("Initializing client for service catalog (%s)", err))
-	}
-
 	fmt.Printf("Creating broker %s...\n", utils.Entity(broker.Name))
-	resp, err := svcClient.ServiceBrokers().Create(&broker)
+	resp, err := scClient.ServiceBrokers().Create(&broker)
 	if err != nil {
 		utils.Exit1(fmt.Sprintf("Creating broker resource (%s)", err))
 	}
